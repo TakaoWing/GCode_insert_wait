@@ -13,7 +13,7 @@ def main():
     st.write("This app inserts a wait time into a G-code file between lines 42 and 43.")
 
     # File upload
-    uploaded_file = st.file_uploader("Upload your G-code file", type=["gcode", "txt"])
+    uploaded_file = st.file_uploader("Upload your G-code file", type=["gcode"])
 
     # Wait time input
     start_time = st.time_input("Enter start time")
