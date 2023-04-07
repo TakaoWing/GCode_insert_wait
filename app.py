@@ -3,7 +3,7 @@ import streamlit as st
 from functions.page_styling.page_styling import custom_css
 from functions.gcode_processing.gcode_processing import insert_wait_gcode
 from functions.download_link.download_link import create_download_link
-from datetime import datetime, timedelta
+from functions.time_processing.time_processing import calculate_elapsed_time
 
 def main():
     # Title and description
@@ -17,21 +17,15 @@ def main():
 
     # Wait time input
     start_time = st.time_input("Enter start time")
-    now = datetime.now()
-    wait_time = timedelta(hours=start_time.hour, minutes=start_time.minute, seconds=start_time.second)
-    elapsed_time = now - now.replace(hour=0, minute=0, second=0, microsecond=0) - wait_time
-    seconds = elapsed_time.total_seconds()
-    hours, remainder = divmod(seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    elapsed_time_string = f"{int(hours):02d}h{int(minutes):02d}m{int(seconds):02d}s"
-    st.write(f"Elapsed time since {start_time}: {elapsed_time_string}")
+    elapsed_time,seconds = calculate_elapsed_time(start_time)
+    st.write(f"Elapsed time since {start_time}: {elapsed_time}")
 
 
     # Process the uploaded file and insert wait time
     if uploaded_file and start_time:
         if st.button("Insert Wait Time"):
             input_gcode_file = io.TextIOWrapper(uploaded_file)
-            output_gcode = insert_wait_gcode(input_gcode_file, elapsed_time.seconds)
+            output_gcode = insert_wait_gcode(input_gcode_file, seconds)
 
             # Provide a download link for the modified G-code
             st.markdown(create_download_link(output_gcode, "modified_gcode.gcode"), unsafe_allow_html=True)
