@@ -1,7 +1,6 @@
 import base64
-import streamlit as st
 
-def upload():
+def upload(st):
     """
     G-code ファイルをアップロードする。
 
