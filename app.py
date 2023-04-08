@@ -1,20 +1,20 @@
 import io
 import streamlit as st
-from functions.page_styling.page_styling import custom_css
+from functions.page_styling.page_styling import set_custom_css
 from functions.gcode_processing.gcode_processing import insert_wait_gcode
-from functions.download_link.download_link import create_download_link
+from functions.file_processing.file_processing import upload,create_download_link
 from functions.time_processing.time_processing import calculate_elapsed_time
 
 def main():
     # Title and description
     st.set_page_config(page_title="G-code Wait Time Inserter")
-    custom_css()
+    set_custom_css("style.css")
     st.title("G-code Wait Time Inserter")
     st.write("This app inserts a wait time into a G-code file between lines 42 and 43.")
 
-    # File upload
-    uploaded_file = st.file_uploader("Upload your G-code file", type=["gcode"])
-
+   # File upload
+    uploaded_file = upload()
+    
     # Wait time input
     start_time = st.time_input("Enter start time")
     elapsed_time,seconds = calculate_elapsed_time(start_time)
